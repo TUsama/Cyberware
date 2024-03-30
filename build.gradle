@@ -109,14 +109,6 @@ repositories {
         name = "MC Mod Devs"
         url = 'https://maven.mcmoddev.com'
     }
-    maven { // The One Probe, EnderIO, EnderCore
-        name 'tterrag'
-        url 'https://maven.tterrag.com/'
-    }
-    maven { // The One Probe, EnderIO, EnderCore
-        name 'tterrag2'
-        url 'https://maven2.tterrag.com/'
-    }
     maven {
         url = 'https://maven.blamejared.com'
         name = 'BlameJared Maven'
@@ -227,34 +219,16 @@ tasks.register('generateMetaFiles') {
 }
 
 jar {
-    into('/') {
-        // Add all of the dependency JARs to the main JAR for later extraction
-        from configurations.embed
-        // Also include all dependency meta files
-        from "${buildDir}/dependencyMeta/"
-    }
-    doFirst{
-        manifest {
-            def attribute_map = [:]
-            attribute_map['ContainedDeps'] = configurations.embed.collect { it.name }.join(' ')
-            if (project.use_coremod.toBoolean()) {
-                attribute_map['FMLCorePlugin'] = project.coremod_plugin_class_name
-                if (project.include_mod.toBoolean()) {
-                    attribute_map['FMLCorePluginContainsFMLMod'] = true
-                    attribute_map['ForceLoadAsMod'] = project.gradle.startParameter.taskNames[0] == "build"
-                }
-            }
-            if (project.use_access_transformer.toBoolean()) {
-                attribute_map['FMLAT'] = project.mod_id + '_at.cfg'
-            }
-            attributes(attribute_map)
-        }
-        // Add all embedded dependencies into the jar
-        //from(provider { configurations.embed.collect { it.isDirectory() ? it : zipTree(it) } })
+    exclude "**/TODO.txt"
+    exclude "**/update-dist.json"
+    //destinationDir = file 'output'
 
+    manifest {
+        attributes FMLAT: "cyberware_at.cfg"
     }
-    dependsOn generateMetaFiles
 }
+
+
 
 
 tasks.named("processIdeaSettings").configure {
