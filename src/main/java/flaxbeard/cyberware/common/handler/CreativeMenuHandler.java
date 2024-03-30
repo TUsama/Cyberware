@@ -187,7 +187,7 @@ public class CreativeMenuHandler
 			
 			// force a refresh of the page
 			// note: this only called client side, when clicking, hence there's no need to cache it
-			gui.setCurrentCreativeTab(Cyberware.creativeTab);
+			//gui.setCurrentCreativeTab(Cyberware.creativeTab);
 		}
 	}
 
